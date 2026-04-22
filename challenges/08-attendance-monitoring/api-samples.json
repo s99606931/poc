@@ -1,0 +1,66 @@
+{
+  "scenario_1_travel_card_mismatch": {
+    "detection": {
+      "rule_code": "AUD-HCM-E-TRAVEL-CARD-MISMATCH",
+      "emp_cd": "EMP20230810",
+      "emp_nm": "이*영",
+      "dept_cd": "D010201",
+      "travel_destination": "부산광역시",
+      "travel_period": "2026-04-15 ~ 2026-04-17",
+      "card_usage_detected": [
+        {
+          "usage_datetime": "2026-04-16T19:30:00",
+          "location": "서울특별시 강남구",
+          "amount": 85000,
+          "merchant": "강남 레스토랑",
+          "mcc": "5812 (음식점)"
+        }
+      ],
+      "severity": "HIGH",
+      "confidence": 0.98
+    },
+    "ai_explanation": "2026-04-15~17 부산 출장 중, 4월 16일 19:30 서울 강남구에서 법인카드 85,000원이 사용되었습니다. 출장지와 광역시 단위가 일치하지 않아 부정 사용 의심 지표로 탐지됩니다. 복무규정 제28조(법인카드 관리)에 따라 감사 담당자 검토가 필요합니다.",
+    "recommended_action": "해당 직원 소명 요청 → 사용 내역 검증 → 필요 시 환수 조치"
+  },
+
+  "scenario_2_overtime_pattern": {
+    "detection": {
+      "rule_code": "AUD-HCM-F-OVERTIME-PATTERN",
+      "emp_cd": "EMP20210712",
+      "weekly_overtimes": [
+        {"year": 2026, "week": 13, "hours": 18, "days": 5},
+        {"year": 2026, "week": 14, "hours": 22, "days": 6},
+        {"year": 2026, "week": 15, "hours": 17, "days": 5}
+      ],
+      "total_overtime": 57,
+      "consecutive_weeks": 3,
+      "severity": "MEDIUM"
+    },
+    "ai_explanation": "최근 3주 연속 주당 15시간 이상 초과근무가 기록되었습니다 (총 57시간). 근로기준법 제53조 주 52시간제 관점에서 과로 위험이 있으며, 인사부 확인이 필요합니다."
+  },
+
+  "scenario_3_attendance_anomaly": {
+    "detection": {
+      "rule_code": "AUD-HCM-G-ATTENDANCE-NIGHT",
+      "emp_cd": "EMP20200505",
+      "checkin_time": "2026-04-18T02:30:00",
+      "work_date": "2026-04-18",
+      "is_weekend": false,
+      "position_cd": "P05",
+      "is_night_worker": false,
+      "severity": "LOW"
+    },
+    "ai_explanation": "2026-04-18 02:30 자정 이후 출근 기록이 탐지되었습니다. 해당 직원은 야간 근무자 화이트리스트에 등록되지 않아 이상 패턴으로 분류됩니다."
+  },
+
+  "batch_summary": {
+    "execution_time_ms": 186000,
+    "total_employees_analyzed": 512,
+    "anomalies_detected": {
+      "travel_card_mismatch": 2,
+      "overtime_pattern": 4,
+      "attendance_anomaly": 7
+    },
+    "alerts_sent": 2
+  }
+}

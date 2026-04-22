@@ -1,0 +1,50 @@
+{
+  "scenario": "30분 배치 동기화 — ERP에서 12명 변경 감지 → 그룹웨어 반영",
+
+  "step_1_scheduler_trigger": {
+    "triggered_at": "2026-04-21T10:30:00+09:00",
+    "source": "APScheduler (cron: */30 * * * *)"
+  },
+
+  "step_2_fetch_erp": {
+    "mcp": "erp-mcp.get_hr_info",
+    "params": {"changed_since": "2026-04-21T10:00:00+09:00"},
+    "result": {"total_count": 12, "delta_changes": 12}
+  },
+
+  "step_3_fetch_groupware": {
+    "mcp": "groupware-mcp.get_hr_info",
+    "params": {"all": true},
+    "result": {"total_count": 245}
+  },
+
+  "step_4_diff_detect": {
+    "changes_detected": [
+      {"emp_cd": "EMP20240315", "action": "UPDATE", "changed_fields": {"dept_cd": {"old": "D010201", "new": "D010202"}, "position_cd": {"old": "P05", "new": "P04"}}},
+      {"emp_cd": "EMP20241010", "action": "INSERT", "new_data": {"emp_nm": "신입사원", "dept_cd": "D010201"}},
+      {"emp_cd": "EMP20180205", "action": "DELETE", "reason": "RETIRE_DATE 설정됨"}
+    ],
+    "total_changes": 12
+  },
+
+  "step_5_sync_execute": {
+    "mcp": "groupware-mcp.sync_erp_to_groupware",
+    "params": {"employees": "...", "mode": "UPSERT", "dry_run": false},
+    "result": {
+      "sync_id": "SYNC-20260421-001",
+      "success_count": 11,
+      "failed_count": 1,
+      "duration_ms": 1840
+    }
+  },
+
+  "step_6_log_result": {
+    "alli_audit_entry": {
+      "category": "sync",
+      "severity": "GREEN",
+      "title": "ERP-그룹웨어 정기 동기화 완료",
+      "body": "성공 11건, 실패 1건 (1840ms)",
+      "payload": {"sync_id": "SYNC-20260421-001"}
+    }
+  }
+}

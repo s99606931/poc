@@ -1,0 +1,94 @@
+{
+  "scenario": "연가 신청 기한 질문 시나리오",
+
+  "step_1_user_query": {
+    "endpoint": "POST /chat/stream",
+    "body": {
+      "chat_mode": "regulation_qa",
+      "message": "연가 신청은 며칠 전까지 해야 하나요?",
+      "tenant_id": "tenant-001"
+    }
+  },
+
+  "step_2_embed_query": {
+    "model": "BGE-M3",
+    "embedding_dim": 1024
+  },
+
+  "step_3_milvus_search": {
+    "partition": ["regulation_hr"],
+    "top_k": 20,
+    "results_summary": "20건 반환 (유사도 0.45~0.92)"
+  },
+
+  "step_4_rerank": {
+    "reranker": "bge-reranker-v2-m3",
+    "top_k_final": 5,
+    "top_chunks": [
+      {
+        "chunk_id": "REG-HR-001-art12-p2",
+        "regulation_name": "복무규정",
+        "article_no": "제12조",
+        "article_title": "연가의 신청",
+        "content": "제12조(연가의 신청) ① 연가를 사용하고자 하는 공무원은 소속 기관의 장에게 신청하여야 한다. ② 연가의 신청은 사용하고자 하는 날의 최소 3일 전까지 신청함을 원칙으로 한다. 다만, 긴급한 사유가 있는 경우에는 그러하지 아니하다.",
+        "similarity": 0.921,
+        "rerank_score": 0.894,
+        "source_file": "복무규정_v2.3.pdf",
+        "page_no": 8
+      },
+      {
+        "chunk_id": "REG-HR-001-art13",
+        "regulation_name": "복무규정",
+        "article_no": "제13조",
+        "article_title": "긴급 연가",
+        "content": "제13조(긴급 연가) 질병, 사고 등 긴급한 사유가 있는 경우에는 사전 신청 없이 당일 전화로 신청할 수 있으며, 복귀 후 즉시 정식 신청서를 제출하여야 한다.",
+        "similarity": 0.843,
+        "rerank_score": 0.721,
+        "source_file": "복무규정_v2.3.pdf",
+        "page_no": 9
+      }
+    ]
+  },
+
+  "step_5_llm_generate": {
+    "model": "coder",
+    "system_prompt": "...(규정 Q&A 시스템 프롬프트)",
+    "response_sse_chunks": [
+      "연가", "는 ", "사용하", "고자 하는 ", "날의 ", "**최소 3일 전까지**", " 신청해야 합니다.", "\n\n",
+      "**근거**: 복무규정 제12조 제2항 (연가의 신청)", "\n\n",
+      "**예외**: 질병·사고 등 긴급한 사유가 있는 경우 당일 전화 신청 후 복귀 시 정식 신청서 제출 가능",
+      "(복무규정 제13조)", "\n\n",
+      "※ 본 답변은 참고용이며, 공식 해석은 인사부에 문의하세요."
+    ]
+  },
+
+  "step_6_final_response": {
+    "event_type": "regulation_qa_card",
+    "data": {
+      "answer": "연가는 사용하고자 하는 날의 **최소 3일 전까지** 신청해야 합니다.\n\n**근거**: 복무규정 제12조 제2항 (연가의 신청)\n\n**예외**: 질병·사고 등 긴급한 사유가 있는 경우 당일 전화 신청 후 복귀 시 정식 신청서 제출 가능 (복무규정 제13조)\n\n※ 본 답변은 참고용이며, 공식 해석은 인사부에 문의하세요.",
+      "citations": [
+        {
+          "regulation_name": "복무규정",
+          "article_no": "제12조",
+          "paragraph_no": "제2항",
+          "content": "연가의 신청은 사용하고자 하는 날의 최소 3일 전까지 신청함을 원칙으로 한다.",
+          "url": "/admin/documents/REG-HR-001#p8",
+          "relevance": 0.894
+        },
+        {
+          "regulation_name": "복무규정",
+          "article_no": "제13조",
+          "content": "질병, 사고 등 긴급한 사유가 있는 경우에는 사전 신청 없이...",
+          "url": "/admin/documents/REG-HR-001#p9",
+          "relevance": 0.721
+        }
+      ],
+      "quality_score": 92,
+      "related_questions": [
+        "연가 일수는 몇 일까지 가능한가요?",
+        "반차·반일 연가는 어떻게 신청하나요?",
+        "연가 미사용 시 보상은?"
+      ]
+    }
+  }
+}

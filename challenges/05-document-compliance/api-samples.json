@@ -1,0 +1,100 @@
+{
+  "scenario": "품의서 PDF 업로드 → 적합성 점검",
+
+  "step_1_upload": {
+    "endpoint": "POST /compliance/check (admin-api)",
+    "content_type": "multipart/form-data",
+    "file": "2026-04-품의서-001.pdf (245KB, 3페이지)",
+    "metadata": {"docType": "품의서", "tenant_id": "tenant-001"}
+  },
+
+  "step_2_ocr_extract": {
+    "node": "ocr_extract_node",
+    "tool": "ocr-service (:6014) POST /extract",
+    "result": {
+      "full_text": "품의서\n제목: 사무용품 구매\n품의금액: ₩5,000,000\n...",
+      "page_count": 3,
+      "confidence": 0.98
+    }
+  },
+
+  "step_3_classify": {
+    "node": "classify_node",
+    "doc_type": "품의서",
+    "confidence": 0.92
+  },
+
+  "step_4_fetch_regulations": {
+    "node": "fetch_node (RAG mode)",
+    "partitions": ["regulation_finance", "regulation_general"],
+    "related_regulations": [
+      {"regulation_name": "물품관리법 시행령", "article_no": "제15조 제1항", "content": "..."},
+      {"regulation_name": "예산회계훈령", "article_no": "제8조", "content": "..."}
+    ]
+  },
+
+  "step_5_evidence_assess": {
+    "node": "evidence_assess_node",
+    "violations": [
+      {
+        "regulation_name": "물품관리법 시행령",
+        "article_no": "제15조 제1항",
+        "violation_detail": "품의금액이 계약금액과 일치하지 않음 (품의: 5,000,000원, 계약: 4,800,000원)",
+        "violation_type": "금액_불일치",
+        "severity": "HIGH",
+        "confidence": 0.95,
+        "location": "2페이지 상단"
+      }
+    ]
+  },
+
+  "step_6_generate_suggestions": {
+    "suggestions": [
+      "품의금액을 실제 계약금액인 4,800,000원으로 수정하거나, 변경품의 절차를 진행하십시오."
+    ]
+  },
+
+  "step_7_final_response": {
+    "checkId": "chk-20260421-142301-abc",
+    "docType": "품의서",
+    "docTypeConfidence": 0.92,
+    "isCompliant": false,
+    "score": 80,
+    "grade": "B",
+    "gradeLabel": "양호",
+    "processingTimeSec": 8.3,
+    "violations": [
+      {
+        "regulationName": "물품관리법 시행령",
+        "articleNo": "제15조 제1항",
+        "violationDetail": "품의금액이 계약금액과 일치하지 않음 (품의: 5,000,000원, 계약: 4,800,000원)",
+        "suggestion": "품의금액을 실제 계약금액인 4,800,000원으로 수정하거나, 변경품의 절차를 진행하십시오.",
+        "severity": "HIGH",
+        "location": "2페이지 상단",
+        "penalty": 20
+      }
+    ],
+    "compliantItems": [
+      {"regulationName": "문서관리훈령", "articleNo": "제8조", "score": 100}
+    ],
+    "regulationsApplied": ["물품관리법 시행령", "예산회계훈령", "문서관리훈령"],
+    "fileInfo": {
+      "originalName": "2026-04-품의서-001.pdf",
+      "fileSizeKb": 245,
+      "pageCount": 3,
+      "ocrApplied": false
+    },
+    "createdAt": "2026-04-21T14:23:08+09:00"
+  },
+
+  "step_8_admin_web_rendering": {
+    "page": "/admin/documents (확장)",
+    "sections": [
+      "점수 + 등급 (점수 80, B등급, 🔵)",
+      "위반 항목 목록 (1건, HIGH)",
+      "조항별 상세 (클릭 시 원본 규정 모달)",
+      "수정 제안 (복사 가능)",
+      "처리 이력 저장 (alli-audit)"
+    ]
+  }
+}

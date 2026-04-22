@@ -1,0 +1,342 @@
+{
+  "description": "과제 3 개인비서 — End-to-End API 요청/응답 샘플",
+  "scenario": "2026-04-21 10:00 기준, 회계부 주임(EMP20240315)이 '오늘 처리할 업무 알려줘' 문의",
+  "created_at": "2026-04-21",
+
+  "step_1_client_request": {
+    "endpoint": "POST /chat/stream (chat-api :4002)",
+    "headers": {
+      "Authorization": "Bearer <JWT_token>",
+      "Content-Type": "application/json",
+      "Accept": "text/event-stream"
+    },
+    "body": {
+      "session_id": "sess-20260421-abc123",
+      "chat_mode": "personal_assistant",
+      "message": "오늘 처리해야 할 업무 알려줘",
+      "context": {
+        "emp_cd": "EMP20240315",
+        "tenant_id": "tenant-001",
+        "date": "2026-04-21"
+      }
+    }
+  },
+
+  "step_2_erp_mcp_call_deadline_tasks": {
+    "mcp_tool": "get_deadline_tasks",
+    "input": {
+      "emp_cd": "EMP20240315",
+      "date": "2026-04-21",
+      "horizon_days": 7,
+      "categories": ["ALL"]
+    },
+    "output": {
+      "emp_cd": "EMP20240315",
+      "query_date": "2026-04-21",
+      "horizon_days": 7,
+      "total_count": 3,
+      "tasks": [
+        {
+          "task_id": "ACC-CLOSE-202604-001",
+          "category": "ACC",
+          "subcategory": "월결산",
+          "title": "2026년 4월 월결산 마감",
+          "description": "회계 전표 입력 완료 및 월결산 확정 필요",
+          "deadline": "2026-04-21T18:00:00+09:00",
+          "days_remaining": 0,
+          "importance": "HIGH",
+          "urgency": "D0",
+          "source_view": "V_ALLI_ACC_CLOSING",
+          "related_url": "http://erp.agency.go.kr/acc/close/202604",
+          "department_cd": "D010201",
+          "submitted": false
+        },
+        {
+          "task_id": "HCM-EVAL-2026H1-003",
+          "category": "HCM",
+          "subcategory": "정기평가",
+          "title": "2026년 상반기 정기평가 피평가자 의견 제출",
+          "description": "팀장 평가 확인 후 본인 의견 2주 이내 제출",
+          "deadline": "2026-04-23T23:59:59+09:00",
+          "days_remaining": 2,
+          "importance": "MEDIUM",
+          "urgency": "D3",
+          "source_view": "V_ALLI_HCM_DEADLINE",
+          "related_url": "http://erp.agency.go.kr/hcm/eval/2026h1",
+          "department_cd": "D010201",
+          "submitted": false
+        },
+        {
+          "task_id": "BDG-REQ-202605-042",
+          "category": "BDG",
+          "subcategory": "예산요구서",
+          "title": "2026년 5월 부서 예산요구서 제출",
+          "description": "5월 집행 예정 예산 항목별 요구서 작성",
+          "deadline": "2026-04-28T18:00:00+09:00",
+          "days_remaining": 7,
+          "importance": "MEDIUM",
+          "urgency": "D7",
+          "source_view": "V_ALLI_BDG_SUBMIT",
+          "related_url": "http://erp.agency.go.kr/bdg/req/202605",
+          "department_cd": "D010201",
+          "submitted": false
+        }
+      ],
+      "summary": {"d0_count": 1, "d1_count": 0, "d3_count": 1, "d7_count": 1}
+    }
+  },
+
+  "step_3_erp_mcp_call_pending_items": {
+    "mcp_tool": "get_pending_items",
+    "input": {"emp_cd": "EMP20240315"},
+    "output": {
+      "emp_cd": "EMP20240315",
+      "total_count": 2,
+      "items": [
+        {
+          "item_id": "EXP-20260418-001",
+          "category": "EXPENSE",
+          "title": "부산 출장비 청구 (2026-04-15 ~ 04-17)",
+          "amount": 285000,
+          "submitted_at": "2026-04-18T14:30:00+09:00",
+          "waiting_days": 3,
+          "current_approver": {"emp_cd": "EMP20200205", "emp_nm": "김*준", "dept_nm": "회계부", "position": "과장"},
+          "next_approver": {"emp_cd": "EMP20150301", "emp_nm": "박*수", "dept_nm": "회계부", "position": "부장"},
+          "status": "PENDING",
+          "source_view": "V_ALLI_ACC_PENDING_EXPENSE",
+          "erp_url": "http://erp.agency.go.kr/acc/expense/EXP-20260418-001"
+        },
+        {
+          "item_id": "LV-20260419-007",
+          "category": "LEAVE",
+          "title": "연차 1일 신청 (2026-04-25)",
+          "amount": null,
+          "submitted_at": "2026-04-19T10:15:00+09:00",
+          "waiting_days": 2,
+          "current_approver": {"emp_cd": "EMP20200205", "emp_nm": "김*준", "dept_nm": "회계부", "position": "과장"},
+          "next_approver": null,
+          "status": "PENDING",
+          "source_view": "V_ALLI_HCM_PENDING_LEAVE",
+          "erp_url": "http://erp.agency.go.kr/hcm/leave/LV-20260419-007"
+        }
+      ],
+      "summary": {"expense_count": 1, "leave_count": 1, "overtime_count": 0, "long_waiting_count": 1}
+    }
+  },
+
+  "step_4_groupware_mcp_call_schedule": {
+    "mcp_tool": "get_schedule",
+    "input": {
+      "emp_cd": "EMP20240315",
+      "date_from": "2026-04-21",
+      "date_to": "2026-04-21"
+    },
+    "output": {
+      "emp_cd": "EMP20240315",
+      "date_from": "2026-04-21",
+      "date_to": "2026-04-21",
+      "total_count": 3,
+      "schedules": [
+        {
+          "schedule_id": "GW-SCH-20260421-042",
+          "category": "MEETING",
+          "title": "회계부 주간 업무 회의",
+          "description": "4월 월결산 진행 상황 공유 및 5월 예산 계획 논의",
+          "start_dt": "2026-04-21T10:00:00+09:00",
+          "end_dt": "2026-04-21T11:00:00+09:00",
+          "is_all_day": false,
+          "location": "본관 3층 회의실 A",
+          "online_url": null,
+          "organizer": {"emp_cd": "EMP20150301", "emp_nm": "박*수", "dept_nm": "회계부"},
+          "attendees": [
+            {"emp_cd": "EMP20240315", "emp_nm": "본인", "dept_nm": "회계부", "position": "주임", "rsvp_status": "ACCEPTED"},
+            {"emp_cd": "EMP20200205", "emp_nm": "김*준", "dept_nm": "회계부", "position": "과장", "rsvp_status": "ACCEPTED"}
+          ],
+          "importance": "HIGH",
+          "status": "CONFIRMED",
+          "related_docs": ["http://gw.agency.go.kr/doc/202604-weekly-report.pdf"],
+          "source": "DB_DIRECT"
+        },
+        {
+          "schedule_id": "GW-SCH-20260421-058",
+          "category": "REPORT",
+          "title": "월결산 보고서 제출 마감",
+          "description": "2026-04 월결산 보고서 작성 후 회계부장 결재 필요",
+          "start_dt": "2026-04-21T18:00:00+09:00",
+          "end_dt": "2026-04-21T18:00:00+09:00",
+          "is_all_day": false,
+          "location": null,
+          "online_url": null,
+          "organizer": {"emp_cd": "SYSTEM", "emp_nm": "시스템", "dept_nm": "시스템"},
+          "attendees": [{"emp_cd": "EMP20240315", "emp_nm": "본인", "dept_nm": "회계부", "position": "주임", "rsvp_status": "ACCEPTED"}],
+          "importance": "HIGH",
+          "status": "CONFIRMED",
+          "related_docs": [],
+          "source": "DB_DIRECT"
+        },
+        {
+          "schedule_id": "GW-SCH-20260421-073",
+          "category": "TRAINING",
+          "title": "행정정보시스템 AI 도입 설명회 (선택)",
+          "description": "전 부서 대상 AI 활용 사례 공유",
+          "start_dt": "2026-04-21T14:00:00+09:00",
+          "end_dt": "2026-04-21T15:30:00+09:00",
+          "is_all_day": false,
+          "location": "대강당",
+          "online_url": "https://zoom.us/j/123456789",
+          "organizer": {"emp_cd": "EMP20100101", "emp_nm": "정*훈", "dept_nm": "정보시스템팀"},
+          "attendees": [],
+          "importance": "LOW",
+          "status": "CONFIRMED",
+          "related_docs": [],
+          "source": "DB_DIRECT"
+        }
+      ],
+      "summary": {"meetings_count": 1, "business_trips_count": 0, "reports_deadline_count": 1, "all_day_count": 0}
+    }
+  },
+
+  "step_5_groupware_mcp_call_pending_approvals": {
+    "mcp_tool": "get_pending_approvals",
+    "input": {"emp_cd": "EMP20240315", "role": "APPROVER"},
+    "output": {
+      "emp_cd": "EMP20240315",
+      "role": "APPROVER",
+      "total_count": 0,
+      "approvals": [],
+      "summary": {"urgent_count": 0, "same_day_count": 0, "total_amount": 0}
+    },
+    "note": "본인(주임)은 APPROVER 역할이 아직 없으므로 0건. 과장급 이상이 조회 시 결과가 나옴."
+  },
+
+  "step_6_ai_assistant_priority_analysis": {
+    "node": "analyze_priority_node",
+    "input_to_llm": {
+      "model": "coder",
+      "system_prompt": "...(Eisenhower Matrix 우선순위 분석 프롬프트)",
+      "user_input": {
+        "deadline_tasks": ["(step_2 결과 요약)"],
+        "pending_items": ["(step_3 결과 요약)"],
+        "schedules": ["(step_4 결과 요약)"],
+        "approvals": []
+      },
+      "temperature": 0.1,
+      "max_tokens": 800,
+      "response_format": {"type": "json_object"}
+    },
+    "output_from_llm": {
+      "priorities": [
+        {
+          "task_id": "ACC-CLOSE-202604-001",
+          "task_title": "2026년 4월 월결산 마감",
+          "urgency_score": 10,
+          "importance_score": 10,
+          "total_score": 100,
+          "quadrant": "Q1",
+          "quadrant_label": "긴급·중요",
+          "reason": "오늘 18:00 마감 + 회계 월결산은 핵심 업무"
+        },
+        {
+          "task_id": "GW-SCH-20260421-042",
+          "task_title": "회계부 주간 업무 회의",
+          "urgency_score": 9,
+          "importance_score": 8,
+          "total_score": 72,
+          "quadrant": "Q1",
+          "quadrant_label": "긴급·중요",
+          "reason": "오늘 10:00 시작 + 월결산 진행 상황 공유 필수"
+        },
+        {
+          "task_id": "GW-SCH-20260421-058",
+          "task_title": "월결산 보고서 제출 마감",
+          "urgency_score": 10,
+          "importance_score": 9,
+          "total_score": 90,
+          "quadrant": "Q1",
+          "quadrant_label": "긴급·중요",
+          "reason": "오늘 18:00 마감, ACC-CLOSE-202604-001과 연계"
+        },
+        {
+          "task_id": "EXP-20260418-001",
+          "task_title": "부산 출장비 청구 결재 대기",
+          "urgency_score": 6,
+          "importance_score": 4,
+          "total_score": 24,
+          "quadrant": "Q3",
+          "quadrant_label": "긴급·비중요",
+          "reason": "3일 대기 중 — 과장님께 결재 재촉 메시지 필요"
+        },
+        {
+          "task_id": "HCM-EVAL-2026H1-003",
+          "task_title": "정기평가 피평가자 의견 제출",
+          "urgency_score": 5,
+          "importance_score": 7,
+          "total_score": 35,
+          "quadrant": "Q2",
+          "quadrant_label": "비긴급·중요",
+          "reason": "2일 여유 있음, 하지만 평가 결과에 영향"
+        }
+      ]
+    }
+  },
+
+  "step_7_ai_assistant_guide_generation": {
+    "node": "generate_guide_node",
+    "output_to_client_sse": {
+      "event_type": "personal_assistant_card",
+      "event_id": "evt-20260421-10-05-002",
+      "data": {
+        "summary": "오늘 처리해야 할 업무 5건 (긴급·중요 3건). 월결산(18:00 마감)을 최우선으로 진행하세요.",
+        "current_time": "2026-04-21T10:05:00+09:00",
+        "matrix": {
+          "q1_urgent_important": [
+            {"id": "ACC-CLOSE-202604-001", "time": "D-0 18:00", "title": "월결산 마감", "category": "ACC", "link": "http://erp.agency.go.kr/acc/close/202604"},
+            {"id": "GW-SCH-20260421-042", "time": "10:00~11:00", "title": "회계부 주간 업무 회의", "category": "MEETING", "link": "http://gw.agency.go.kr/schedule/GW-SCH-20260421-042"},
+            {"id": "GW-SCH-20260421-058", "time": "D-0 18:00", "title": "월결산 보고서 제출", "category": "REPORT", "link": null}
+          ],
+          "q2_important_not_urgent": [
+            {"id": "HCM-EVAL-2026H1-003", "time": "D-2", "title": "정기평가 의견 제출", "category": "HCM", "link": "http://erp.agency.go.kr/hcm/eval/2026h1"},
+            {"id": "BDG-REQ-202605-042", "time": "D-7", "title": "5월 예산요구서 제출", "category": "BDG", "link": "http://erp.agency.go.kr/bdg/req/202605"}
+          ],
+          "q3_urgent_not_important": [
+            {"id": "EXP-20260418-001", "time": "3일 대기", "title": "출장비 결재 재촉 필요", "category": "EXPENSE", "link": "http://erp.agency.go.kr/acc/expense/EXP-20260418-001"}
+          ],
+          "q4_not_urgent_not_important": [
+            {"id": "GW-SCH-20260421-073", "time": "14:00", "title": "AI 도입 설명회 (선택)", "category": "TRAINING", "link": "http://gw.agency.go.kr/schedule/GW-SCH-20260421-073"}
+          ]
+        },
+        "recommended_action_sequence": [
+          "① [지금~10:00] 월결산 전표 상태 점검 (회의 전)",
+          "② [10:00~11:00] 회계부 회의 참석",
+          "③ [11:00~17:00] 월결산 마감 + 보고서 작성",
+          "④ [17:00~18:00] 보고서 결재 상신",
+          "⑤ [내일~] 정기평가 의견 작성"
+        ],
+        "follow_ups": [
+          {"label": "월결산 시작", "action": "open_url", "value": "http://erp.agency.go.kr/acc/close/202604"},
+          {"label": "과장님께 결재 재촉 메시지 보내기", "action": "send_message", "value": {"to": "EMP20200205", "template": "출장비 결재 부탁드립니다"}},
+          {"label": "설명회 불참 응답", "action": "gw_decline", "value": "GW-SCH-20260421-073"}
+        ]
+      }
+    }
+  },
+
+  "step_8_chat_web_rendering": {
+    "component": "PersonalTaskCard.tsx",
+    "props_received": "(step_7 data 객체 전체)",
+    "ui_structure": "Eisenhower 2x2 매트릭스 + 추천 순서 리스트 + 액션 버튼들"
+  },
+
+  "performance_targets": {
+    "end_to_end_latency_sec": 8,
+    "parallel_fetch_latency_sec": 5,
+    "llm_priority_latency_sec": 2,
+    "llm_guide_generation_sec": 1
+  },
+
+  "error_scenarios": {
+    "erp_mcp_unavailable": "groupware만 응답 + '현재 ERP 조회 불가 — 부분 결과'",
+    "groupware_api_timeout": "erp-mcp만 응답 + '그룹웨어 일정은 직접 확인 필요'",
+    "llm_timeout": "규칙 기반 우선순위로 fallback (마감일 D-0/D-1/D-3 기준)"
+  }
+}

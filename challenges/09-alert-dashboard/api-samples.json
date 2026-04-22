@@ -1,0 +1,114 @@
+{
+  "api_1_send_notification": {
+    "endpoint": "POST /admin-api/notify/send",
+    "authentication": "X-API-Key",
+    "request_body": {
+      "tenantId": "tenant-001",
+      "category": "audit_anomaly",
+      "severity": "RED",
+      "title": "[긴급] 조달과 분할 결제 의심 (1,230,000원)",
+      "body": "EMP20190215(조달과 박**)님이 3일간 3회 분할 청구 (1,230,000원). 결재 기준금액 초과 의심.",
+      "payload": {
+        "ruleCode": "AUD-ACC-B-SPLIT-PAYMENT",
+        "deptCode": "D020105",
+        "empCd": "EMP20190215",
+        "riskScore": 25,
+        "anomalyId": "ANO-20260420-001"
+      },
+      "targets": {
+        "sse": true,
+        "email": ["auditor@agency.go.kr", "audit-team@agency.go.kr"],
+        "webhook": ["kakaowork"]
+      }
+    },
+    "response": {
+      "notifyId": "NOT-20260421-0702-001",
+      "auditLogId": "audit-uuid-001",
+      "channels_sent": ["sse", "email", "kakaowork"],
+      "failed": [],
+      "sent_at": "2026-04-21T07:02:15+09:00"
+    }
+  },
+
+  "api_2_sse_stream": {
+    "endpoint": "GET /admin-api/notify/stream",
+    "headers": {
+      "Authorization": "Bearer <JWT>",
+      "Accept": "text/event-stream"
+    },
+    "events_streamed": [
+      "event: connected\ndata: {\"status\":\"connected\",\"emp_cd\":\"EMP20150301\"}\n\n",
+      "event: audit_anomaly\ndata: {\"eventId\":\"...\",\"severity\":\"RED\",\"title\":\"[긴급] ...\",\"payload\":{...}}\n\n",
+      "event: heartbeat\ndata: {\"timestamp\":\"2026-04-21T07:02:45+09:00\"}\n\n",
+      "event: notification_count\ndata: {\"unread_count\":5}\n\n"
+    ]
+  },
+
+  "api_3_dashboard_stats": {
+    "endpoint": "GET /admin-api/audit/stats",
+    "response": {
+      "period": {"from": "2026-04-01", "to": "2026-04-21"},
+      "kpis": {
+        "totalAnomalies": 48,
+        "redCount": 3,
+        "orangeCount": 12,
+        "yellowCount": 22,
+        "greenCount": 11,
+        "trendPercent": 18.5,
+        "pendingCount": 27,
+        "falsePositiveCount": 4
+      },
+      "recentAnomalies": [
+        {"anomalyId": "ANO-20260420-001", "title": "...", "severity": "RED", "detectedAt": "..."}
+      ],
+      "monthlyTrend": [
+        {"month": "2025-11", "red": 2, "orange": 8, "yellow": 15, "total": 25},
+        {"month": "2025-12", "red": 1, "orange": 6, "yellow": 18, "total": 25},
+        {"month": "2026-01", "red": 3, "orange": 9, "yellow": 14, "total": 26},
+        {"month": "2026-02", "red": 2, "orange": 11, "yellow": 19, "total": 32},
+        {"month": "2026-03", "red": 1, "orange": 7, "yellow": 17, "total": 25},
+        {"month": "2026-04", "red": 3, "orange": 12, "yellow": 22, "total": 37}
+      ]
+    }
+  },
+
+  "api_4_risk_heatmap": {
+    "endpoint": "GET /admin-api/audit/risk-heatmap?from=2026-03-01&to=2026-04-21",
+    "response": {
+      "departments": [
+        {"dept_cd": "D010200", "dept_nm": "재무과"},
+        {"dept_cd": "D010201", "dept_nm": "회계부"},
+        {"dept_cd": "D020105", "dept_nm": "조달과"},
+        {"dept_cd": "D030100", "dept_nm": "인사부"}
+      ],
+      "weeks": ["2026-W10", "2026-W11", "2026-W12", "2026-W13", "2026-W14", "2026-W15", "2026-W16"],
+      "matrix": [
+        [{"score": 0.02, "grade": "GREEN"}, {"score": 0.04, "grade": "YELLOW"}, ...],
+        [{"score": 0.08, "grade": "ORANGE"}, {"score": 0.11, "grade": "ORANGE"}, ...],
+        [{"score": 0.18, "grade": "RED"}, {"score": 0.22, "grade": "RED"}, ...],
+        [{"score": 0.01, "grade": "GREEN"}, ...]
+      ]
+    }
+  },
+
+  "api_5_notify_rules": {
+    "endpoint": "PUT /admin-api/notify/rules/D020105",
+    "request_body": {
+      "dept_cd": "D020105",
+      "threshold_red": 0.15,
+      "threshold_orange": 0.08,
+      "threshold_yellow": 0.03,
+      "recipients": {
+        "red": ["audit-team@agency.go.kr", "dept-head-020105@agency.go.kr"],
+        "orange": ["audit-team@agency.go.kr"],
+        "yellow": []
+      },
+      "channels": {
+        "red": ["email", "sse", "kakaowork"],
+        "orange": ["email", "sse"],
+        "yellow": ["sse"]
+      },
+      "debounce_hours": 24
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "scenario": "2026-04-21 07:00 배치 실행 → 3건 이상 탐지 → RED 1건 즉시 알림",
+
+  "step_1_batch_trigger": {
+    "scheduler": "APScheduler (매일 07:00)",
+    "started_at": "2026-04-21T07:00:00+09:00"
+  },
+
+  "step_2_load_data": {
+    "sql_file": "sql-queries.sql#1",
+    "total_rows": 187,
+    "date": "2026-04-20"
+  },
+
+  "step_3_detect_rules": {
+    "rule_a_duplicate": 1,
+    "rule_b_split": 2,
+    "rule_c_zscore": 3,
+    "rule_d_isolation_forest": 2,
+    "total_anomalies": 8
+  },
+
+  "step_4_risk_scoring": {
+    "high_count": 3,
+    "medium_count": 4,
+    "low_count": 1,
+    "individual_scores": [
+      {"emp_cd": "EMP20190215", "dept_cd": "D020105", "score": 25, "grade": "RED"},
+      {"emp_cd": "EMP20230810", "dept_cd": "D010201", "score": 10, "grade": "ORANGE"}
+    ]
+  },
+
+  "step_5_ai_explanation": {
+    "anomaly_id": "ANO-20260420-001",
+    "llm_call": "ai-assistant generate_node",
+    "explanation": "EMP20190215(조달과 박**)님이 2026-04-18~04-20 사이 3일간 동일 항목(사무용품)을 490,000원 × 2회 + 250,000원 × 1회로 분할 청구하였습니다. 총 1,230,000원으로 결재 기준금액(500,000원)을 초과하는 분할 결제 가능성이 높습니다. 관련 규정: 기관 지출규정 제8조."
+  },
+
+  "step_6_save_to_alli_audit": {
+    "admin_api_endpoint": "POST /audit/anomalies",
+    "alli_audit_entry": {
+      "category": "audit_anomaly",
+      "severity": "HIGH",
+      "title": "분할 결제 의심 — 조달과 박** (3건, 1,230,000원)",
+      "body": "(step_5 explanation)",
+      "payload": {
+        "anomaly_id": "ANO-20260420-001",
+        "rule_code": "AUD-ACC-B-SPLIT-PAYMENT",
+        "emp_cd": "EMP20190215",
+        "dept_cd": "D020105",
+        "dept_nm": "조달과",
+        "total_amount": 1230000,
+        "exp_ids": ["EXP-20260418-042", "EXP-20260419-015", "EXP-20260420-028"],
+        "risk_score": 25,
+        "grade": "RED"
+      }
+    }
+  },
+
+  "step_7_send_notification": {
+    "trigger": "RED grade",
+    "admin_api_endpoint": "POST /notify/send",
+    "channels": ["sse", "email", "kakaowork"],
+    "recipients": [
+      "auditor@agency.go.kr",
+      "audit-team@agency.go.kr"
+    ],
+    "result": {"sent_count": 4, "failed_count": 0}
+  },
+
+  "step_8_dashboard_update": {
+    "admin_web_page": "/admin/activities/audits",
+    "sse_event_type": "audit_anomaly",
+    "real_time_refresh": true
+  },
+
+  "batch_summary": {
+    "execution_time_ms": 142000,
+    "total_expenses_analyzed": 187,
+    "anomalies_detected": 8,
+    "alerts_sent": 1,
+    "completed_at": "2026-04-21T07:02:22+09:00"
+  }
+}

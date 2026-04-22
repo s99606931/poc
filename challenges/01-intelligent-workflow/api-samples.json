@@ -1,0 +1,88 @@
+{
+  "scenario": "부산 출장비 청구 기안 작성 시나리오",
+  "user_input": "다음주 부산 출장(2026-04-27~29) 출장비 청구 기안 작성해줘. 교통 KTX, 숙박 2박",
+
+  "step_1_classify": {
+    "detected_doc_type": "TRIP",
+    "confidence": 0.97,
+    "extracted_entities": {
+      "destination": "부산",
+      "start_date": "2026-04-27",
+      "end_date": "2026-04-29",
+      "duration_days": 3,
+      "transport": "KTX",
+      "accommodation_nights": 2
+    }
+  },
+
+  "step_2_erp_get_expense_info": {
+    "budget_info": {"balance": 7500000, "balance_ratio": 0.625},
+    "expense_limit": {"per_trip_limit": 500000, "is_within_limit": true},
+    "past_expenses_summary": "최근 12개월 출장 2건, 평균 155,000원"
+  },
+
+  "step_3_groupware_get_route": {
+    "recommended_route": [
+      {"step": 1, "role": "팀장", "approver_nm": "김준수", "position": "과장"},
+      {"step": 2, "role": "부서장", "approver_nm": "박민수", "position": "부장"},
+      {"step": 3, "role": "전결", "approver_nm": "정현훈", "position": "국장"}
+    ],
+    "rule_applied": "TRIP_RULE_2026_V3_MID (100,001~500,000원)"
+  },
+
+  "step_4_groupware_get_template": {
+    "template_id": "TPL-TRIP-V3",
+    "fields": ["title", "trip_destination", "trip_period_start", "trip_period_end", "trip_purpose", "amount", "transport_type", "accommodation"]
+  },
+
+  "step_5_llm_generate_draft": {
+    "title": "부산 출장비 청구 (2026-04-27 ~ 04-29)",
+    "trip_destination": "부산광역시",
+    "trip_period_start": "2026-04-27",
+    "trip_period_end": "2026-04-29",
+    "duration_days": 3,
+    "trip_purpose": "2026년 상반기 지방 행정기관 업무 협의 참석 및 관련 자료 수집",
+    "amount_breakdown": {
+      "transport": 112000,
+      "accommodation": 120000,
+      "meals": 45000,
+      "etc": 8000,
+      "total": 285000
+    },
+    "amount": 285000,
+    "transport_type": "KTX (왕복)",
+    "accommodation": "부산역 인근 숙박 2박",
+    "legal_basis": "공무원 여비 규정 제5조, 기관 지출 규정 제12조",
+    "budget_account_cd": "BA-2026-ACC-TRIP-001"
+  },
+
+  "step_6_rag_validate": {
+    "is_compliant": true,
+    "score": 92,
+    "checked_regulations": [
+      {"rule": "공무원 여비 규정 제5조", "status": "PASS", "note": "금액 한도 내"},
+      {"rule": "여비 규정 제7조 숙박비", "status": "PASS", "note": "2박 × 60,000원 = 120,000원 기준 부합"}
+    ],
+    "warnings": [],
+    "suggestions": []
+  },
+
+  "step_7_create_draft": {
+    "approval_id": "GW-APR-20260421-102",
+    "status": "DRAFT",
+    "gw_url": "http://gw.agency.go.kr/approval/GW-APR-20260421-102"
+  },
+
+  "step_8_chat_web_rendering": {
+    "component": "ApprovalDraftCard.tsx",
+    "sections": [
+      "title",
+      "doc_type + approval_id",
+      "기안 본문 (편집 가능 textarea)",
+      "결재선 바 (step 1→2→3, 사진/이름/직급)",
+      "ERP 근거 데이터 (예산 잔액, 지출 한도 체크 결과)",
+      "규정 적합성 점수 (92/100)",
+      "[수정] [상신] [취소] 버튼"
+    ]
+  }
+}
