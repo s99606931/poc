@@ -190,7 +190,7 @@ sequenceDiagram
 
 ## 5. 핵심 결정 포인트 (고객 협의)
 
-상세 7개 결정: [../15-per-challenge-decision-points.md#-과제-3--개인-맞춤형-비서-일정업무-리마인드](../15-per-challenge-decision-points.md)
+상세 7개 결정: [../decisions.md#-과제-3--개인-맞춤형-비서-일정업무-리마인드](../decisions.md)
 
 P0 핵심:
 - **D3-01 우선순위 알고리즘** — 아이젠하워 매트릭스 권장
@@ -214,6 +214,6 @@ P0 핵심:
 
 - [../03-personal-assistant.md](../03-personal-assistant.md) — 원본 과제 문서
 - [../01-intelligent-workflow/](../01-intelligent-workflow/) — 과제 1 (결재 기안, groupware-mcp 공유)
-- [../../design/groupware-mcp.md](../../design/groupware-mcp.md) — groupware-mcp 설계
-- [../../improvements/erp-mcp.md](../../improvements/erp-mcp.md) — erp-mcp 확장
-- [../../improvements/ai-assistant.md](../../improvements/ai-assistant.md) — ai-assistant 그래프 4종
+- [../../services/new/groupware-mcp.md](../../services/new/groupware-mcp.md) — groupware-mcp 설계
+- [../../services/improvements/erp-mcp.md](../../services/improvements/erp-mcp.md) — erp-mcp 확장
+- [../../services/improvements/ai-assistant.md](../../services/improvements/ai-assistant.md) — ai-assistant 그래프 4종

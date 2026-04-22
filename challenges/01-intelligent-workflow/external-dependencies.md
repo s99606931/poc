@@ -22,7 +22,7 @@
 | 첨부파일 업로드 | — | ⚠️ 권장 |
 
 **Write 권한 미확보 시**: 기안 **초안 저장만**으로 POC 진행, 실제 등록은 담당자 수동.
-**대안**: [../15-per-challenge-decision-points.md#-d2-06-미확정-시-영향](../15-per-challenge-decision-points.md)
+**대안**: [../decisions.md#-d2-06-미확정-시-영향](../decisions.md)
 
 ## 3. 고객 사전 제공 필요
 

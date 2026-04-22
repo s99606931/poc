@@ -303,4 +303,4 @@ def rule_based_priority_fallback(state: PersonalAssistantState) -> list:
 - [README.md](README.md)
 - [architecture.md](architecture.md) — 전체 구성도
 - [api-samples.json](api-samples.json) — step 6 우선순위 분석 샘플
-- [../../improvements/ai-llm.md](../../improvements/ai-llm.md) — 프롬프트 라이브러리 (TASK-LLM-01)
+- [../../services/improvements/ai-llm.md](../../services/improvements/ai-llm.md) — 프롬프트 라이브러리 (TASK-LLM-01)

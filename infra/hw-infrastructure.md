@@ -4,7 +4,7 @@
 > **기준**: `projects/20_alli-llm/docker-compose.prod.yaml` + `.env.prod` 실제 운영 구성
 > **중요**: GPU 서버는 조달 리드타임이 2~3개월 이므로 **즉시 발주 필요**
 
-> **📌 고객 확인 필수**: [13-customer-checklist.md D 인프라 요건](../challenges/13-customer-checklist.md#d-인프라-요건-p1--중요) (GPU 보유/임대/클라우드 결정, 서버 사양 확정)
+> **📌 고객 확인 필수**: [../customer/checklist.md D 인프라 요건](../customer/checklist.md#d-인프라-요건-p1--중요) (GPU 보유/임대/클라우드 결정, 서버 사양 확정)
 
 ---
 
@@ -403,5 +403,5 @@ DB   : CPU 16코어, RAM 64GB, SSD 4TB
 
 - [sw-infrastructure.md](sw-infrastructure.md) — S/W 스택
 - [network-infrastructure.md](network-infrastructure.md) — 네트워크 구성
-- [../improvements/ai-llm.md](../improvements/ai-llm.md) — LLM 모델 상세 (Gemma-4 31B AWQ, BGE-M3, PP-OCRv5)
-- [../challenges/13-customer-checklist.md](../challenges/13-customer-checklist.md) — 고객 인프라 체크리스트
+- [../services/improvements/ai-llm.md](../services/improvements/ai-llm.md) — LLM 모델 상세 (Gemma-4 31B AWQ, BGE-M3, PP-OCRv5)
+- [../customer/checklist.md](../customer/checklist.md) — 고객 인프라 체크리스트

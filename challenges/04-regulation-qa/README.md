@@ -22,7 +22,7 @@
 | **bge-reranker-v2-m3** | 재순위 |
 | **Gemma-4 31B AWQ** | 답변 생성 |
 
-🔴 **P0-2 규정 문서 10종** — [상세](../15-per-challenge-decision-points.md#-d6-02-미확정-시-영향--poc-2-전체-지연-사유)
+🔴 **P0-2 규정 문서 10종** — [상세](../decisions.md#-d6-02-미확정-시-영향--poc-2-전체-지연-사유)
 
 ---
 
@@ -41,7 +41,7 @@
 
 ## 4. 고객 결정 포인트
 
-[../15-per-challenge-decision-points.md#-과제-4--규정-qa-서비스-대화형-rag](../15-per-challenge-decision-points.md) (8개)
+[../decisions.md#-과제-4--규정-qa-서비스-대화형-rag](../decisions.md) (8개)
 
 핵심:
 - D4-01 답변 범위 (조항만 / 해석 포함)

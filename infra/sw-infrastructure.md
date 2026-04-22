@@ -141,7 +141,7 @@ graph TB
 | GPU 3 | rank-3 (9 GB) | ai-llm-test embed/rerank (6 GB) | **15 GB** | 5 GB ⚠️ |
 
 > ⚠️ **20 GB GPU에서 GPU 2/3 여유 부족** — 24GB GPU 이상 권장.
-> 상세 VRAM 재산정: [../improvements/ai-llm.md](../improvements/ai-llm.md)
+> 상세 VRAM 재산정: [../services/improvements/ai-llm.md](../services/improvements/ai-llm.md)
 
 #### Gemma-4 31B-it-AWQ 사양
 
@@ -169,7 +169,7 @@ KV Cache per token = 2 × 62 × 16 × 160 × 2 bytes ≈ 620 KB
 128K context → TP4: 20.34 GB/GPU (고용량 GPU 필수)
 ```
 
-상세 계산: [../improvements/ai-llm.md#2-gemma-4-31b-it-awq-상세-및-gpu-vram-재산정](../improvements/ai-llm.md)
+상세 계산: [../services/improvements/ai-llm.md#2-gemma-4-31b-it-awq-상세-및-gpu-vram-재산정](../services/improvements/ai-llm.md)
 
 #### Embedding / Rerank (ai-llm 컨테이너 내 sentence-transformers)
 

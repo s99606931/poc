@@ -37,5 +37,5 @@ python scripts/evaluate_retrieval.py --partition regulation_hr --queries ./test_
 ## 4. 관련 문서
 
 - [../04-regulation-qa/milvus-schema.md](../04-regulation-qa/milvus-schema.md) — Milvus 컬렉션 스키마
-- [../../improvements/ai-rag.md](../../improvements/ai-rag.md)
-- [../../improvements/hwp-rag-pipeline.md](../../improvements/hwp-rag-pipeline.md)
+- [../../services/improvements/ai-rag.md](../../services/improvements/ai-rag.md)
+- [../../services/improvements/hwp-rag-pipeline.md](../../services/improvements/hwp-rag-pipeline.md)

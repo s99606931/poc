@@ -101,7 +101,7 @@
 
 ## 5. 고객 결정 포인트 (7개)
 
-[../15-per-challenge-decision-points.md#-과제-1--전자결재-자동-기안-및-분류](../15-per-challenge-decision-points.md)
+[../decisions.md#-과제-1--전자결재-자동-기안-및-분류](../decisions.md)
 
 핵심:
 - D1-01 문서 유형 3종 vs 5종 vs 10종
@@ -114,4 +114,4 @@
 
 - [../01-intelligent-workflow.md](../01-intelligent-workflow.md) — 원본 과제
 - [../03-personal-assistant/](../03-personal-assistant/) — groupware-mcp 기본 도구 공유
-- [../../design/groupware-mcp.md](../../design/groupware-mcp.md) — groupware-mcp 설계
+- [../../services/new/groupware-mcp.md](../../services/new/groupware-mcp.md) — groupware-mcp 설계

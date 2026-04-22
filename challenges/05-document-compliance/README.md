@@ -52,7 +52,7 @@ admin-web 업로드 → admin-api/compliance → ai-assistant compliance_graph
 
 ## 4. 고객 결정 포인트
 
-[../15-per-challenge-decision-points.md#-과제-5--문서-적합성-검점](../15-per-challenge-decision-points.md) (8개)
+[../decisions.md#-과제-5--문서-적합성-검점](../decisions.md) (8개)
 
 핵심:
 - D5-03 점검 결과 활용 (참고/차단/경고)

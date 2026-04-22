@@ -24,6 +24,6 @@ ERP 결재/지출 데이터에서 이상 거래 패턴을 탐지 (중복 청구,
 
 ## 3. 고객 결정 포인트 (10개 — 가장 많음)
 
-[../15-per-challenge-decision-points.md#-과제-7--지능형-회계-감사-이상-결제-패턴-탐지](../15-per-challenge-decision-points.md)
+[../decisions.md#-과제-7--지능형-회계-감사-이상-결제-패턴-탐지](../decisions.md)
 
 핵심: D7-03 탐지 임계값, D7-05 처리 프로세스, D7-09 개인정보

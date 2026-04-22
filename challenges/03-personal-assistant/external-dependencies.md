@@ -56,7 +56,7 @@
 
 ## 2. 그룹웨어 시스템 의존
 
-> 🔴 **P0-1 결정**: [그룹웨어 Write 권한 확보](../15-per-challenge-decision-points.md#-d2-06-미확정-시-영향--과제-2-전체-불가-사유)
+> 🔴 **P0-1 결정**: [그룹웨어 Write 권한 확보](../decisions.md#-d2-06-미확정-시-영향--과제-2-전체-불가-사유)
 > 본 과제(03)는 **Read-Only 로 충분** — Write는 과제 2(ERP 동기화)에만 필요
 
 ### 2.1 접근 요건
@@ -146,4 +146,4 @@
 - [db-schemas.sql](db-schemas.sql) — 필요 뷰 DDL
 - [erp-mcp-tools.md](erp-mcp-tools.md) — ERP MCP 도구 명세
 - [groupware-mcp-tools.md](groupware-mcp-tools.md) — 그룹웨어 MCP 도구 명세
-- [../../challenges/13-customer-checklist.md](../13-customer-checklist.md) — B1~B8 외부 시스템 체크리스트
+- [../../customer/checklist.md](../../customer/checklist.md) — B1~B8 외부 시스템 체크리스트

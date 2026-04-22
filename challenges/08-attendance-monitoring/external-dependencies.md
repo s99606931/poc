@@ -51,7 +51,7 @@ MASK_POLICY = {
 
 ## 6. 고객 결정 포인트
 
-[../15-per-challenge-decision-points.md#-과제-8--복무-관리-모니터링](../15-per-challenge-decision-points.md) (8개)
+[../decisions.md#-과제-8--복무-관리-모니터링](../decisions.md) (8개)
 
 핵심:
 - D8-01 탐지 대상 복무 이상 우선순위

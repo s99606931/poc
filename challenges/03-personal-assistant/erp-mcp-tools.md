@@ -386,4 +386,4 @@ async def test_get_deadline_tasks_empty():
 - [db-schemas.sql](db-schemas.sql) — 쿼리 대상 뷰 DDL
 - [api-samples.json](api-samples.json) — 전체 샘플 JSON 묶음
 - [groupware-mcp-tools.md](groupware-mcp-tools.md) — 그룹웨어 쪽 스펙
-- [../../improvements/erp-mcp.md](../../improvements/erp-mcp.md) — erp-mcp 확장 가이드
+- [../../services/improvements/erp-mcp.md](../../services/improvements/erp-mcp.md) — erp-mcp 확장 가이드

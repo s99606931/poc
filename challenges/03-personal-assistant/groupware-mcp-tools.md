@@ -453,5 +453,5 @@ mcp.add_tool(get_monthly_schedule)
 
 - [erp-mcp-tools.md](erp-mcp-tools.md) — ERP 쪽 스펙
 - [db-schemas.sql](db-schemas.sql) — GW_SCHEDULE / GW_APPROVAL 스키마
-- [../../design/groupware-mcp.md](../../design/groupware-mcp.md) — groupware-mcp 전체 설계
+- [../../services/new/groupware-mcp.md](../../services/new/groupware-mcp.md) — groupware-mcp 전체 설계
 - [external-dependencies.md](external-dependencies.md) — 그룹웨어 접근 권한 사전 협의
